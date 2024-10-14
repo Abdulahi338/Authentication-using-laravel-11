@@ -33,22 +33,13 @@ Route::middleware('guest')->group(function () {
     // Password reset routes
     Route::get('/password/reset/{token}/{email}', [AuthController::class, 'showResetForm'])->name('password.reset');
     Route::post('/password/reset', [AuthController::class, 'reset'])->name('password.update');
-    Route::get('/verify-email/{token}', [AuthController::class, 'verifyEmail'])->name('verification.verify');
-
 
    
 });
 
 // Authenticated routes (users who are logged in)
 Route::middleware('auth')->group(function () {
-     // Email verification route
-
-    // Verification notice route
-    Route::get('/verification-notice', function () {
-        return view('auth.verification-notice');
-    })->name('verification.notice');
-        // Resend verification route
-        Route::post('/resend-verification', [AuthController::class, 'resendVerification'])->name('verification.resend');
+    
     // Dashboard route
     Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
 

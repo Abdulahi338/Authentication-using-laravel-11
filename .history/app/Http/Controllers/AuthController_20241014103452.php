@@ -20,17 +20,17 @@ class AuthController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:3|confirmed', // Password should be more secure
+            'password' => 'required|string|min:3|confirmed', // Updated min length for security
         ]);
-
-        // Hash password and create the user
+        
+        // Hash password and create user
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
         ]);
 
-        // Generate verification token
+        // Generate verification token and store in DB
         $token = Str::random(32);
         DB::table('email_verifications')->insert([
             'user_id' => $user->id,
@@ -41,8 +41,7 @@ class AuthController extends Controller
         // Send verification email
         Mail::to($user->email)->send(new VerificationMail($user, $token));
 
-        // Redirect to login with a success message
-        return redirect()->route('login')->with('message', 'Registration successful! Please check your email to verify your account.');
+        return redirect()->route('auth.login'); // Ensure you have a route for this
     }
 
     // Login function
@@ -53,27 +52,28 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required|string',
         ]);
-
+    
         // Attempt to find the user
         $user = User::where('email', $credentials['email'])->first();
-
+    
+        // Check if the user exists
         if (!$user) {
             return redirect()->back()->withErrors(['email' => 'Invalid credentials.'])->withInput();
         }
-
+    
         // Check if the email is verified
         if (!$user->email_verified_at) {
             return redirect()->back()->withErrors(['email' => 'Please verify your email first.'])->withInput();
         }
-
+    
         // Check the password
         if (!Hash::check($credentials['password'], $user->password)) {
             return redirect()->back()->withErrors(['email' => 'Invalid credentials.'])->withInput();
         }
-
+    
         // Log the user in
         auth()->login($user);
-
+    
         return redirect()->route('dashboard'); // Redirect to the dashboard after successful login
     }
 
@@ -82,62 +82,66 @@ class AuthController extends Controller
     {
         // Look for the token in the email_verifications table
         $verification = DB::table('email_verifications')->where('token', $token)->first();
-
+        
         // If the token is not found, return an error
         if (!$verification) {
-            return redirect()->route('login')->withErrors(['token' => 'Invalid verification token.']);
+            return response()->json(['message' => 'Invalid verification token'], 400);
         }
-
+    
         // Find the user by the token
         $user = User::find($verification->user_id);
-
-        // Mark email as verified
+        
+        // Mark email as verified and save
         $user->email_verified_at = now();
         $user->save();
-
+    
         // Optionally delete the token after successful verification
         DB::table('email_verifications')->where('token', $token)->delete();
-
+    
         // Log the user in
         auth()->login($user);
-
+    
+        // Redirect to the dashboard with a success message
         return redirect()->route('dashboard')->with('message', 'Email verified successfully! Welcome to your dashboard.');
     }
+    
 
     // Resend Email Verification
     public function resendVerification(Request $request)
     {
-        // Validate the request
+        // Validate the request to ensure an email is provided
         $request->validate([
             'email' => 'required|email',
         ]);
-
+    
         // Find the user by email
         $user = User::where('email', $request->email)->first();
-
+    
+        // Check if the user exists
         if (!$user) {
             return redirect()->back()->withErrors(['email' => 'User not found.']);
         }
-
+    
         // Check if the user already has a verified email
         if ($user->email_verified_at) {
             return redirect()->back()->withErrors(['email' => 'Email is already verified.']);
         }
-
+    
         // Generate a new verification token
         $token = Str::random(32);
-
+        
         // Update or create a new verification record
         DB::table('email_verifications')->updateOrInsert(
             ['user_id' => $user->id],
             ['token' => $token, 'created_at' => now()]
         );
-
+    
         // Send the verification email
         Mail::to($user->email)->send(new VerificationMail($user, $token));
-
+    
         return redirect()->back()->with('message', 'Verification email resent.');
     }
+    
 
     // Show password reset request form
     public function showResetRequestForm()
@@ -152,7 +156,7 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email',
         ]);
-
+    
         // Send the reset link
         $status = Password::sendResetLink($request->only('email'));
 
@@ -165,16 +169,16 @@ class AuthController extends Controller
     // Password Reset Form
     public function showResetForm($token, $email)
     {
+        // Verify the email and token before showing the reset form
         return view('auth.passwords.reset')->with(['token' => $token, 'email' => $email]);
     }
 
     // Handle password reset
     public function reset(Request $request)
     {
-        // Validate the request
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:3|confirmed', 
             'token' => 'required',
         ]);
 
@@ -187,7 +191,6 @@ class AuthController extends Controller
             }
         );
 
-        // Redirect or return based on the status
         return $status === Password::PASSWORD_RESET
             ? redirect()->route('login')->with('status', __($status))
             : back()->withErrors(['email' => __($status)]);
@@ -196,11 +199,12 @@ class AuthController extends Controller
     // Dashboard
     public function dashboard()
     {
+        // Assuming you have authentication set up
         if (auth()->check()) {
             return view('dashboard', ['user' => auth()->user()]);
         }
 
-        return redirect('/login')->with('message', 'Please log in first.');
+        return redirect('/login');  // Redirect to login if not authenticated
     }
 
     // Logout

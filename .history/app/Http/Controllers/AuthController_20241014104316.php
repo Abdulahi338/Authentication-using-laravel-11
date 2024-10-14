@@ -20,7 +20,7 @@ class AuthController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:3|confirmed', // Password should be more secure
+            'password' => 'required|string|min:6|confirmed', // Password should be more secure
         ]);
 
         // Hash password and create the user
