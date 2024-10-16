@@ -20,8 +20,8 @@
         <form action="{{ url('/logout') }}" method="POST">
             @csrf
             <button type="submit" class="btn btn-primary"><a class="nav-link" href="{{ url('/posts/create') }}">Cresate posts</a></button>
-            <button type="submit" class="btn btn-primary"><a class="nav-link" href="{{ url('/posts') }}">Go to posts</a></button>
-            
+            <button type="submit" class="btn btn-primary"><a class="nav-link" href="{{ url('/Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
+') }}">Cresate posts</a></button>
 
             <button type="submit" class="btn btn-danger">Logout</button>
         </form>
