@@ -21,6 +21,11 @@ public function posts()
 {
     return $this->hasMany(Post::class);
 }
+// User.php
+public function posts()
+{
+    return $this->hasMany(Post::class);
+}
 
 
     protected $fillable = [

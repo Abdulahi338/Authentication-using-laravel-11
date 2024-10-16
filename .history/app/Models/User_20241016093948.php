@@ -12,17 +12,9 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
-     *
+     
      * @var array<int, string>
      */
-    // User.php
-public function posts()
-{
-    return $this->hasMany(Post::class);
-}
-
-
     protected $fillable = [
         'name',
         'email',

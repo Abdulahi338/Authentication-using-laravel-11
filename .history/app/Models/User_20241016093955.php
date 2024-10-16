@@ -16,13 +16,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    // User.php
-public function posts()
-{
-    return $this->hasMany(Post::class);
-}
-
-
+    
     protected $fillable = [
         'name',
         'email',

@@ -19,8 +19,7 @@
 
         <form action="{{ url('/logout') }}" method="POST">
             @csrf
-            <button type="submit" class="btn btn-primary"><a class="nav-link" href="{{ url('/posts/create') }}">Cresate posts</a></button>
-
+            <button type="submit" class="btn btn-danger">Cresate</button>
             <button type="submit" class="btn btn-danger">Logout</button>
         </form>
     </div>
