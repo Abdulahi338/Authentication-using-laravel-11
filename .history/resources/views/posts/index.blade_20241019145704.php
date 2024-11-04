@@ -3,7 +3,7 @@
 @section('content')
     <div class="container mt-5">
    
-        <h1 >Your Posts</h1>
+        <h1 class="mb-4">Your Posts</h1>
         @if(session('message'))
         <div class="alert alert-info">{{ session('message') }}</div>
     @endif

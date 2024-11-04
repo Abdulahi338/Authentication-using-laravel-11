@@ -1,9 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container mt-5">
-   
-        <h1 >Your Posts</h1>
+    <div class="container">
         @if(session('message'))
         <div class="alert alert-info">{{ session('message') }}</div>
     @endif
@@ -17,6 +15,7 @@
             </ul>
         </div>
     @endif
+        <h1 class="mb-4">Your Posts</h1>
         @foreach ($posts as $post)
             <div class="card mb-3">
                 <div class="card-body">

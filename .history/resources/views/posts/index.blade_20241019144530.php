@@ -1,22 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container mt-5">
+    <div class="container">
    
-        <h1 >Your Posts</h1>
-        @if(session('message'))
-        <div class="alert alert-info">{{ session('message') }}</div>
-    @endif
-
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+        <h1 class="mb-4">Your Posts</h1>
         @foreach ($posts as $post)
             <div class="card mb-3">
                 <div class="card-body">
