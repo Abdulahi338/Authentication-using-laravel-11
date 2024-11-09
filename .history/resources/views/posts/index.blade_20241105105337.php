@@ -1,4 +1,4 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 
 @section('content')
 <div class="container py-5">
@@ -47,4 +47,5 @@
         <a href="{{ route('posts.create') }}" class="btn btn-primary">Create Post</a>
     </div>
 </div>
-@endsection
+@endsection --}}
+

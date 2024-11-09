@@ -1,4 +1,4 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 
 @section('content')
 <div class="container py-5">
@@ -47,4 +47,53 @@
         <a href="{{ route('posts.create') }}" class="btn btn-primary">Create Post</a>
     </div>
 </div>
+@endsection --}}
+@extends('layouts.app')
+
+@section('content')
+<div class="d-flex">
+    <!-- Sidebar -->
+    <nav class="bg-dark text-white vh-100 p-3" style="width: 250px;">
+        <h3 class="text-center">Admin Panel</h3>
+        <hr class="text-light">
+        <ul class="nav flex-column">
+            <li class="nav-item mb-3">
+                <a href="{{ route('dashboard') }}" class="nav-link text-white">
+                    <i class="fas fa-home me-2"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item mb-3">
+                <a href="#" class="nav-link text-white">
+                    <i class="fas fa-envelope me-2"></i> Incoming Emails
+                </a>
+            </li>
+            <li class="nav-item mb-3">
+                <a href="#" class="nav-link text-white">
+                    <i class="fas fa-paper-plane me-2"></i> Outgoing Emails
+                </a>
+            </li>
+            <li class="nav-item mb-3">
+                <a href="{{ route('posts.index') }}" class="nav-link text-white">
+                    <i class="fas fa-file-alt me-2"></i> Manage Posts
+                </a>
+            </li>
+            <li class="nav-item mb-3">
+                <a href="{{ route('posts.create') }}" class="nav-link text-white">
+                    <i class="fas fa-plus me-2"></i> Create Post
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="container-fluid p-4">
+        <div class="text-center mb-4">
+            <h1 class="fw-bold">Welcome to the Dashboard</h1>
+            <p class="lead text-muted">Manage your posts and emails efficiently.</p>
+        </div>
+
+        @yield('dashboard-content')
+    </div>
+</div>
 @endsection
+

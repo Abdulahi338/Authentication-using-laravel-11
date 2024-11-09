@@ -5,7 +5,7 @@
     <div class="col-10 col-sm-6 col-md-5 col-lg-4">
         <div class="card shadow rounded border-0">
             <div class="card-header bg-white text-dark text-center py-3">
-                <h2 class="mb-0">{{ __('Register') }}</h2>
+                <h5 class="mb-0">{{ __('Register') }}</h5>
             </div>
 
             <div class="card-body p-3">
@@ -62,7 +62,7 @@
                     </div>
 
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">{{ __('Register') }}</button>
+                        <button type="submit" class="btn btn-d">{{ __('Register') }}</button>
                     </div>
 
                     <div class="text-center mt-2">

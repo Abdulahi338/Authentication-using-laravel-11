@@ -5,7 +5,7 @@
     <div class="col-10 col-sm-6 col-md-5 col-lg-4">
         <div class="card shadow rounded border-0">
             <div class="card-header bg-white text-dark text-center py-3">
-                <h2 class="mb-0">{{ __('Register') }}</h2>
+                <2 class="mb-0">{{ __('Register') }}</2>
             </div>
 
             <div class="card-body p-3">

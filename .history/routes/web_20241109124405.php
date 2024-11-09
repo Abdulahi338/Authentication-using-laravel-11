@@ -76,8 +76,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/emails/outgoing', [EmailController::class, 'outgoingEmails'])->name('emails.outgoing');
 
         Route::post('/emails', [EmailController::class, 'store'])->name('emails.store');
-        Route::get('/emails/incoming', [EmailController::class, 'incomingEmails'])->name('emails.incoming');
-
+        
       
         Route::delete('/emails/outgoing', [EmailController::class, 'deleteOutgoing'])->name('emails.outgoing.delete');
 

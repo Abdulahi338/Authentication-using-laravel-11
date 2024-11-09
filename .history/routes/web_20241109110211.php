@@ -3,7 +3,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\EmailController;
 use Illuminate\Support\Facades\Auth;
 
 // Guest routes (not logged in)
@@ -70,17 +69,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
 
 
-        // Email Routes
-        Route::get('/emails', [EmailController::class, 'index'])->name('emails.index');
-        Route::get('/emails/create', [EmailController::class, 'create'])->name('emails.create');
-        Route::get('/emails/outgoing', [EmailController::class, 'outgoingEmails'])->name('emails.outgoing');
-
-        Route::post('/emails', [EmailController::class, 'store'])->name('emails.store');
-        Route::get('/emails/incoming', [EmailController::class, 'incomingEmails'])->name('emails.incoming');
-
-      
-        Route::delete('/emails/outgoing', [EmailController::class, 'deleteOutgoing'])->name('emails.outgoing.delete');
-
+    
 });
 
 
