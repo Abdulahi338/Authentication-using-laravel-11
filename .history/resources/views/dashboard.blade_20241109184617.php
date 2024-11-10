@@ -88,9 +88,7 @@
                                     @csrf
                                     <button type="submit">Logout</button>
                                 </form>
-                                <a href="#" class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    Logout
-                                </a>
+                                
                                 </li>
                             </ul>
                         </li>
