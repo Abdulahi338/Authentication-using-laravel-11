@@ -6,27 +6,28 @@ use App\Models\IncomingEmail;
 use App\Models\OutgoingEmail;
 use Illuminate\Http\Request;
 use App\Mail\UserEmail;
-use Illuminate\Support\Facades\Mail;
-use Carbon\Carbon;
+
+
+use Carbon\Carbon; // Add this line to import Carbon
+
 
 class EmailController extends Controller
 {
-    // Index method to list incoming and outgoing emails
     public function index()
     {
         $incomingEmails = IncomingEmail::where('user_id', auth()->id())->get();
         $outgoingEmails = OutgoingEmail::where('user_id', auth()->id())->get();
-        
         return view('emails.index', compact('incomingEmails', 'outgoingEmails'));
     }
 
-    // Show the email creation form
     public function create()
     {
         return view('emails.create');
     }
 
-    // Store a new outgoing email and send it
+    use App\Mail\VerificationMail;
+    use Illuminate\Support\Facades\Mail;
+    
     public function store(Request $request)
     {
         // Validate the request
@@ -35,8 +36,8 @@ class EmailController extends Controller
             'subject' => 'required|string|max:255',
             'content' => 'required|string',
         ]);
-
-        // Store the outgoing email in the database
+    
+        // Store outgoing email in the database
         $outgoingEmail = OutgoingEmail::create([
             'user_id' => auth()->id(),
             'to' => $request->to,
@@ -44,67 +45,48 @@ class EmailController extends Controller
             'content' => $request->content,
             'sent_at' => now(),
         ]);
-
+    
         // Prepare email details
         $emailDetails = [
             'to' => $request->to,
             'subject' => $request->subject,
             'content' => $request->content,
         ];
-
-        // Send the email using the UserEmail Mailable
+    
+        // Send the email
         Mail::to($request->to)->send(new UserEmail($emailDetails));
-
+    
         return redirect()->route('emails.index')->with('message', 'Email sent successfully!');
     }
+    
 
-    // Dashboard method to provide data for an admin or user dashboard
     public function dashboard()
     {
-        // Calculate counts for incoming and outgoing emails
-        $incomingCount = IncomingEmail::where('user_id', auth()->id())->count();
-        $outgoingCount = OutgoingEmail::where('user_id', auth()->id())->count();
-        $totalEmails = $incomingCount + $outgoingCount;
+        // Get counts for the dashboard
+        $incomingCount = Email::where('type', 'incoming')->count();
+        $outgoingCount = Email::where('type', 'outgoing')->count();
+        $totalEmails = Email::count();
 
-        // Fetch the latest 10 emails (both incoming and outgoing)
-        $emails = IncomingEmail::where('user_id', auth()->id())
-                    ->latest()
-                    ->limit(5)
-                    ->get()
-                    ->merge(
-                        OutgoingEmail::where('user_id', auth()->id())
-                        ->latest()
-                        ->limit(5)
-                        ->get()
-                    )
-                    ->sortByDesc('created_at'); // Sort by date
+        // Get emails to display (e.g., latest 10 emails)
+        $emails = Email::latest()->limit(10)->get();
 
-        // Pass data to the dashboard view
-        return view('emails.dashboard', compact('incomingCount', 'outgoingCount', 'totalEmails', 'emails'));
+        // Pass data to the view
+        return view('posts.dashboard', compact('incomingCount', 'outgoingCount', 'totalEmails', 'emails'));
     }
 
-    public function incomingEmails()
-{
-    // Fetch incoming emails for the authenticated user
-    $incomingEmails = IncomingEmail::where('user_id', auth()->id())->get();
 
-    // Pass the emails to a view
-    return view('emails.incoming', compact('incomingEmails'));
-}
-
-
-    // List outgoing emails
     public function outgoingEmails()
     {
-        // Fetch outgoing emails and parse 'sent_at' as Carbon instances
+        // Fetch outgoing emails and ensure 'sent_at' is a Carbon instance
         $outgoingEmails = OutgoingEmail::where('user_id', auth()->id())
                                        ->get()
                                        ->map(function ($email) {
+                                           // Ensure 'sent_at' is a Carbon instance
                                            $email->sent_at = Carbon::parse($email->sent_at);
                                            return $email;
                                        });
-
-        // Return the 'emails.outgoing' view with outgoing emails
+        
+        // Return the 'emails.outgoing' view with outgoing emails data
         return view('emails.outgoing', compact('outgoingEmails'));
     }
 }

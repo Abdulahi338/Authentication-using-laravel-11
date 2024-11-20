@@ -25,7 +25,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Send Email</button>
-        <button type="submit" class="btn btn-primary "><a class="btn btn-primary" href="{{ route('dashboard') }}">Back to Dashboard</a></button>
+        <button type="submit" class=" "><a class="btn btn-primary" href="{{ route('dashboard') }}">Back to Dashboard</a></button>
     </form>
 </div>
 @endsection

@@ -83,16 +83,6 @@ class EmailController extends Controller
         return view('emails.dashboard', compact('incomingCount', 'outgoingCount', 'totalEmails', 'emails'));
     }
 
-    public function incomingEmails()
-{
-    // Fetch incoming emails for the authenticated user
-    $incomingEmails = IncomingEmail::where('user_id', auth()->id())->get();
-
-    // Pass the emails to a view
-    return view('emails.incoming', compact('incomingEmails'));
-}
-
-
     // List outgoing emails
     public function outgoingEmails()
     {
