@@ -14,7 +14,7 @@ class EmailController extends Controller
     public function index()
     {
         $incomingEmails = IncomingEmail::where('user_id', auth()->id())->paginate(10);
-        $outgoingEmails = OutgoingEmail::where('user_id', auth()->id())->paginate(10);
+        $outgoingEmails = OutgoingEmail::where('user_id', auth()->id())->pagination;
         
         return view('emails.index', compact('incomingEmails', 'outgoingEmails'));
     }
@@ -57,14 +57,15 @@ class EmailController extends Controller
         return redirect()->route('emails.index')->with('message', 'Email sent successfully!');
     }
 
+    // Dashboard method to provide data for an admin or user dashboard
     public function dashboard()
     {
-        // Count incoming and outgoing emails
+        // Calculate counts for incoming and outgoing emails
         $incomingCount = IncomingEmail::where('user_id', auth()->id())->count();
         $outgoingCount = OutgoingEmail::where('user_id', auth()->id())->count();
         $totalEmails = $incomingCount + $outgoingCount;
-    
-        // Fetch latest emails for display
+
+        // Fetch the latest 10 emails (both incoming and outgoing)
         $emails = IncomingEmail::where('user_id', auth()->id())
                     ->latest()
                     ->limit(5)
@@ -76,12 +77,10 @@ class EmailController extends Controller
                         ->get()
                     )
                     ->sortByDesc('created_at'); // Sort by date
-    
-        // Pass the data to the view
-        return view('emails.dashboard', compact('incomingCount', 'outgoingCount', 'totalEmails', 'emails'));
 
+        // Pass data to the dashboard view
+        return view('emails.dashboard', compact('incomingCount', 'outgoingCount', 'totalEmails', 'emails'));
     }
-    
 
     // Method to add an incoming email (e.g., from an external source or simulation)
     public function incomingEmails(Request $request)
@@ -109,7 +108,6 @@ class EmailController extends Controller
         return view('emails.incoming', compact('incomingEmails'))->with('message', 'Incoming email added successfully!');
     }
 
-
     // List outgoing emails
     public function outgoingEmails()
     {
@@ -124,26 +122,4 @@ class EmailController extends Controller
         // Return the 'emails.outgoing' view with outgoing emails
         return view('emails.outgoing', compact('outgoingEmails'));
     }
-
-    // view the email
-
-    public function view($emailId)
-{
-    $email = OutgoingEmail::findOrFail($emailId);  // Adjust this depending on whether it's an incoming or outgoing email
-    return view('emails.view', compact('email'));
-}
-
-public function destroy($emailId)
-{
-    // Find the email or fail if not found
-    $email = OutgoingEmail::findOrFail($emailId);  // You may want to adjust this to IncomingEmail if applicable
-    
-    // Delete the email
-    $email->delete();
-
-    // Redirect with a success message
-    return redirect()->route('emails.index')->with('message', 'Email deleted successfully!');
-}
-
-
 }

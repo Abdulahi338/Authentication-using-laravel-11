@@ -14,7 +14,7 @@ class EmailController extends Controller
     public function index()
     {
         $incomingEmails = IncomingEmail::where('user_id', auth()->id())->paginate(10);
-        $outgoingEmails = OutgoingEmail::where('user_id', auth()->id())->paginate(10);
+        $outgoingEmails = OutgoingEmail::where('user_id', auth()->id())->pagination(10);
         
         return view('emails.index', compact('incomingEmails', 'outgoingEmails'));
     }

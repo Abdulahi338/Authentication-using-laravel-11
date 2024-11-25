@@ -14,7 +14,7 @@ class EmailController extends Controller
     public function index()
     {
         $incomingEmails = IncomingEmail::where('user_id', auth()->id())->paginate(10);
-        $outgoingEmails = OutgoingEmail::where('user_id', auth()->id())->paginate(10);
+        $outgoingEmails = OutgoingEmail::where('user_id', auth()->id())->pagination(10);
         
         return view('emails.index', compact('incomingEmails', 'outgoingEmails'));
     }
@@ -132,18 +132,5 @@ class EmailController extends Controller
     $email = OutgoingEmail::findOrFail($emailId);  // Adjust this depending on whether it's an incoming or outgoing email
     return view('emails.view', compact('email'));
 }
-
-public function destroy($emailId)
-{
-    // Find the email or fail if not found
-    $email = OutgoingEmail::findOrFail($emailId);  // You may want to adjust this to IncomingEmail if applicable
-    
-    // Delete the email
-    $email->delete();
-
-    // Redirect with a success message
-    return redirect()->route('emails.index')->with('message', 'Email deleted successfully!');
-}
-
 
 }

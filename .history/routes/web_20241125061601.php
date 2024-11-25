@@ -78,9 +78,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/emails', [EmailController::class, 'index'])->name('emails.index');
         Route::get('/emails/create', [EmailController::class, 'create'])->name('emails.create');
         Route::get('/emails/outgoing', [EmailController::class, 'outgoingEmails'])->name('emails.outgoing');
-        Route::get('/emails/{email}', [EmailController::class, 'view'])->name('emails.view');
-        Route::delete('/emails/{email}', [EmailController::class, 'destroy'])->name('emails.destroy');
-
 
         Route::post('/emails', [EmailController::class, 'store'])->name('emails.store');
         Route::get('/emails/incoming', [EmailController::class, 'incomingEmails'])->name('emails.incoming');
