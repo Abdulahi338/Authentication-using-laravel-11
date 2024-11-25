@@ -35,7 +35,14 @@ class CreateIncomingEmailsTable extends Migration
      * Reverse the migrations.
      */
 
-     
+
+public function down()
+{
+    Schema::table('incoming_emails', function (Blueprint $table) {
+        $table->string('from')->nullable(false)->change();  // Restore 'from' as non-nullable
+    });
+}
+
     public function down(): void
     {
         Schema::dropIfExists('incoming_emails');

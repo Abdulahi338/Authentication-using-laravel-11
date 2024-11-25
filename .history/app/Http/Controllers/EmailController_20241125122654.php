@@ -102,29 +102,28 @@ class EmailController extends Controller
     // Method to add an incoming email (simulating an incoming email)
     public function addIncomingEmail(Request $request)
     {
-        // Validate incoming email data
+        // Validate the incoming email data
         $request->validate([
-            'from' => 'required|email',  // Make sure 'from' is included in the form and validated
+            'from' => 'required|email',
             'subject' => 'required|string|max:255',
             'content' => 'required|string',
         ]);
     
-        // Store the incoming email in the database
+        // Create an incoming email record in the database
         IncomingEmail::create([
             'user_id' => auth()->id(),
-            'from' => $request->from,  // Ensure that 'from' is being passed
-            'subject' => $request->subject,
-            'content' => $request->content,
-            'received_at' => now(),
+            'from' => $request->from, // The sender's email
+            'subject' => $request->subject, // The subject of the email
+            'content' => $request->content, // The content of the email
+            'received_at' => now(), // Current timestamp or actual received date
         ]);
     
-        // Fetch all incoming emails for the user
+        // Fetch incoming emails for the authenticated user
         $incomingEmails = IncomingEmail::where('user_id', auth()->id())->get();
     
-        // Return the view with the incoming emails
+        // Return the view with incoming emails
         return view('emails.incoming', compact('incomingEmails'))->with('message', 'Incoming email added successfully!');
     }
-    
 
     // Method to list outgoing emails
     public function outgoingEmails()

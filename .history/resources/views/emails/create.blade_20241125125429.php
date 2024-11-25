@@ -11,7 +11,7 @@
 
         <div class="mb-3">
             <label for="to" class="form-label">From</label>
-            <input type="email" class="form-control" id="from" name="from" required>
+            <input type="email" class="form-control" id="to" name="to" required>
         </div>
         <div class="mb-3">
             <label for="to" class="form-label">To</label>

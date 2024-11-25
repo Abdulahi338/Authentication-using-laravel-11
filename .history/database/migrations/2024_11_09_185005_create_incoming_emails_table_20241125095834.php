@@ -34,8 +34,6 @@ class CreateIncomingEmailsTable extends Migration
     /**
      * Reverse the migrations.
      */
-
-     
     public function down(): void
     {
         Schema::dropIfExists('incoming_emails');

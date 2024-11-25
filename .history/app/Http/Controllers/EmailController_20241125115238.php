@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\IncomingEmail;
@@ -45,15 +44,6 @@ class EmailController extends Controller
             'sent_at' => now(),
         ]);
 
-        // Also store it as an incoming email (for simulation purposes)
-        IncomingEmail::create([
-            'user_id' => auth()->id(),
-            'to' => $request->to,
-            'subject' => $request->subject,
-            'content' => $request->content,
-            'sent_at' => now(),
-        ]);
-
         // Prepare email details
         $emailDetails = [
             'to' => $request->to,
@@ -67,7 +57,6 @@ class EmailController extends Controller
         return redirect()->route('emails.index')->with('message', 'Email sent successfully!');
     }
 
-    // Dashboard method to show email statistics and recent emails
     public function dashboard()
     {
         // Count incoming and outgoing emails
@@ -90,43 +79,65 @@ class EmailController extends Controller
     
         // Pass the data to the view
         return view('emails.dashboard', compact('incomingCount', 'outgoingCount', 'totalEmails', 'emails'));
-    }
 
-    // Method to list incoming emails
+    }
     public function incomingEmails()
-    {
-        $incomingEmails = IncomingEmail::where('user_id', auth()->id())->paginate(10);
-        return view('emails.incoming', compact('incomingEmails'));
-    }
+{
+    $incomingEmails = IncomingEmail::where('user_id', auth()->id())->paginate(10);
 
-    // Method to add an incoming email (simulating an incoming email)
-    public function addIncomingEmail(Request $request)
-    {
-        // Validate incoming email data
-        $request->validate([
-            'from' => 'required|email',  // Make sure 'from' is included in the form and validated
-            'subject' => 'required|string|max:255',
-            'content' => 'required|string',
-        ]);
-    
-        // Store the incoming email in the database
-        IncomingEmail::create([
-            'user_id' => auth()->id(),
-            'from' => $request->from,  // Ensure that 'from' is being passed
-            'subject' => $request->subject,
-            'content' => $request->content,
-            'received_at' => now(),
-        ]);
-    
-        // Fetch all incoming emails for the user
-        $incomingEmails = IncomingEmail::where('user_id', auth()->id())->get();
-    
-        // Return the view with the incoming emails
-        return view('emails.incoming', compact('incomingEmails'))->with('message', 'Incoming email added successfully!');
-    }
+    return view('emails.incoming', compact('incomingEmails'));
+    $request->validate([
+        'from' => 'required|email',
+        'subject' => 'required|string|max:255',
+        'content' => 'required|string',
+    ]);
+
+    // Create an incoming email record in the database
+    IncomingEmail::create([
+        'user_id' => auth()->id(),
+        'from' => $request->from, // The sender's email
+        'subject' => $request->subject, // The subject of the email
+        'content' => $request->content, // The content of the email
+        'received_at' => now(), // Current timestamp or actual received date
+    ]);
+
+    // Fetch incoming emails for the authenticated user
+    $incomingEmails = IncomingEmail::where('user_id', auth()->id())->get();
+
+    // Return the view with incoming emails
+    return view('emails.incoming', compact('incomingEmails'))->with('message', 'Incoming email added successfully!');
+}
+
     
 
-    // Method to list outgoing emails
+    // Method to add an incoming email (e.g., from an external source or simulation)
+    // public function incomingEmails(Request $request)
+    // {
+    //     // Validate the incoming email data
+    //     $request->validate([
+    //         'from' => 'required|email',
+    //         'subject' => 'required|string|max:255',
+    //         'content' => 'required|string',
+    //     ]);
+    
+    //     // Create an incoming email record in the database
+    //     IncomingEmail::create([
+    //         'user_id' => auth()->id(),
+    //         'from' => $request->from, // The sender's email
+    //         'subject' => $request->subject, // The subject of the email
+    //         'content' => $request->content, // The content of the email
+    //         'received_at' => now(), // Current timestamp or actual received date
+    //     ]);
+    
+    //     // Fetch incoming emails for the authenticated user
+    //     $incomingEmails = IncomingEmail::where('user_id', auth()->id())->get();
+    
+    //     // Return the view with incoming emails
+    //     return view('emails.incoming', compact('incomingEmails'))->with('message', 'Incoming email added successfully!');
+    // }
+
+
+    // List outgoing emails
     public function outgoingEmails()
     {
         // Fetch outgoing emails and parse 'sent_at' as Carbon instances
@@ -141,23 +152,25 @@ class EmailController extends Controller
         return view('emails.outgoing', compact('outgoingEmails'));
     }
 
-    // View the email
+    // view the email
+
     public function view($emailId)
-    {
-        $email = OutgoingEmail::findOrFail($emailId);  // Adjust this depending on whether it's an incoming or outgoing email
-        return view('emails.view', compact('email'));
-    }
+{
+    $email = OutgoingEmail::findOrFail($emailId);  // Adjust this depending on whether it's an incoming or outgoing email
+    return view('emails.view', compact('email'));
+}
 
-    // Destroy (delete) an email
-    public function destroy($emailId)
-    {
-        // Find the email or fail if not found
-        $email = OutgoingEmail::findOrFail($emailId);  // You may want to adjust this to IncomingEmail if applicable
-        
-        // Delete the email
-        $email->delete();
+public function destroy($emailId)
+{
+    // Find the email or fail if not found
+    $email = OutgoingEmail::findOrFail($emailId);  // You may want to adjust this to IncomingEmail if applicable
+    
+    // Delete the email
+    $email->delete();
 
-        // Redirect with a success message
-        return redirect()->route('emails.index')->with('message', 'Email deleted successfully!');
-    }
+    // Redirect with a success message
+    return redirect()->route('emails.index')->with('message', 'Email deleted successfully!');
+}
+
+
 }
