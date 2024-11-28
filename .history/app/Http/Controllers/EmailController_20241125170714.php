@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\IncomingEmail;
 use App\Models\OutgoingEmail;
-use App\Models\Email; 
+use App\Models\;Email 
 use Illuminate\Http\Request;
 use App\Mail\UserEmail;
 use Illuminate\Support\Facades\Mail;

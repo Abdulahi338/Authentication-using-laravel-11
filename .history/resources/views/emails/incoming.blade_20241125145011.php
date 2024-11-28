@@ -12,6 +12,7 @@
                 <th>Subject</th>
                 <th>Date</th>
                 <th>Actions</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>

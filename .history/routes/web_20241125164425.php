@@ -92,9 +92,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
         Route::get('/emails/{id}/reply', [EmailController::class, 'reply'])->name('emails.reply');
 
-        Route::post('/emails/{id}/send-reply', [EmailController::class, 'sendReply'])->name('emails.sendReply');
-
-
 
 
 });

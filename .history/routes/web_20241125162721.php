@@ -89,14 +89,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
       
         Route::delete('/emails/outgoing', [EmailController::class, 'deleteOutgoing'])->name('emails.outgoing.delete');
 
-        Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
-        Route::get('/emails/{id}/reply', [EmailController::class, 'reply'])->name('emails.reply');
-
-        Route::post('/emails/{id}/send-reply', [EmailController::class, 'sendReply'])->name('emails.sendReply');
-
-
-
-
 });
 
 

@@ -19,7 +19,7 @@
                 <tr>
                     <td>{{ $email->from }}</td>
                     <td>{{ $email->subject }}</td>
-                    <td>{{ $email->sent_at }}</td>
+                    <td>{{ $email->received_at }}</td>
                     <td>
                         <!-- Actions (e.g., view, delete, etc.) -->
                         <a href="{{ route('emails.view', $email->id) }}" class="btn btn-info">View</a>

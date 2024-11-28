@@ -84,31 +84,29 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                <i class="fas fa-user-circle me-2"></i> Profile
-                            </a>
-                            <ul class="dropdown-menu">
-                                <!-- Display the user's email -->
-                                <li>
-                                    <a class="dropdown-item disabled" href="#">
-                                        <i class="fas fa-envelope me-2"></i> {{ Auth::user()->email }}
-                                    </a>
-                                </li>
-                                <li><a class="dropdown-item" href="#">Settings</a></li>
-                                <li>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                    <a href="#" class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        Logout
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        
-                    </ul>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-2"></i> Profile
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- Display the user's email -->
+                            <li>
+                                <a class="dropdown-item disabled" href="#">
+                                    <i class="fas fa-envelope me-2"></i> {{ Auth::user()->email }}
+                                </a>
+                            </li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <li>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                                <a href="#" class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    
                 </div>
             </div>
         </nav>

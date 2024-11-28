@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\IncomingEmail;
 use App\Models\OutgoingEmail;
-use App\Models\Email; 
 use Illuminate\Http\Request;
 use App\Mail\UserEmail;
 use Illuminate\Support\Facades\Mail;
@@ -161,24 +160,15 @@ class EmailController extends Controller
         // Redirect with a success message
         return redirect()->route('emails.index')->with('message', 'Email deleted successfully!');
     }
+
     public function reply($id)
-    {
-        // Find the email by ID
-        $email = Email::findOrFail($id); // This uses the Email model to get the email
+{
+    // Find the email by ID
+    $email = Email::findOrFail($id);
 
-        // Return a view with the email data (You would create the 'emails.reply' view)
-        return view('emails.reply', compact('email'));
-    }
-
-    public function sendReply(Request $request, $id)
-    {
-        $email = Email::findOrFail($id); // Find the email to reply to
-
-        // Handle sending the reply (you might use Laravel's Mail functionality here)
-
-        return redirect()->route('emails.incoming')->with('success', 'Reply sent!');
-    }
-
+    // Pass the email details to a reply view (create one if needed)
+    return view('emails.reply', compact('email'));
+}
 
 
 

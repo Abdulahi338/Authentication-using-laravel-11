@@ -82,20 +82,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/emails/{email}', [EmailController::class, 'view'])->name('emails.view');
         Route::delete('/emails/{email}', [EmailController::class, 'destroy'])->name('emails.destroy');
 
+        Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 
 
 
         Route::post('/emails', [EmailController::class, 'store'])->name('emails.store');
       
         Route::delete('/emails/outgoing', [EmailController::class, 'deleteOutgoing'])->name('emails.outgoing.delete');
-
-        Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
-        Route::get('/emails/{id}/reply', [EmailController::class, 'reply'])->name('emails.reply');
-
-        Route::post('/emails/{id}/send-reply', [EmailController::class, 'sendReply'])->name('emails.sendReply');
-
-
-
 
 });
 

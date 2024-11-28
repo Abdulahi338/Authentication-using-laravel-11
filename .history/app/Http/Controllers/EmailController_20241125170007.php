@@ -161,23 +161,6 @@ class EmailController extends Controller
         // Redirect with a success message
         return redirect()->route('emails.index')->with('message', 'Email deleted successfully!');
     }
-    public function reply($id)
-    {
-        // Find the email by ID
-        $email = Email::findOrFail($id); // This uses the Email model to get the email
-
-        // Return a view with the email data (You would create the 'emails.reply' view)
-        return view('emails.reply', compact('email'));
-    }
-
-    public function sendReply(Request $request, $id)
-    {
-        $email = Email::findOrFail($id); // Find the email to reply to
-
-        // Handle sending the reply (you might use Laravel's Mail functionality here)
-
-        return redirect()->route('emails.incoming')->with('success', 'Reply sent!');
-    }
 
 
 
